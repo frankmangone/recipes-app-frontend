@@ -3,11 +3,11 @@ import type { Component } from "solid-js";
 import logo from "./logo.svg";
 import styles from "./App.module.css";
 
-import FirstComponent from "./components/FirstComponent"
+import IngredientList from "./components/IngredientList"
 
 const App: Component = () => {
   return (
-    <FirstComponent name="Solid" />
+    <IngredientList />
   )
 }
 
