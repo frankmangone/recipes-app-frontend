@@ -1,5 +1,6 @@
 import { createSignal, createEffect, For } from 'solid-js'
 import type { Component } from "solid-js"
+import MainLayout from '../layouts/MainLayout'
 
 interface Ingredient {
   id: string
@@ -19,7 +20,7 @@ const Ingredients: Component = () => {
   })
 
   return (
-    <div>
+    <MainLayout>
       <For each={ingredients()} fallback={<div>Loading...</div>}>
         { (ingredient: Ingredient) => (
           <div>
@@ -27,7 +28,7 @@ const Ingredients: Component = () => {
           </div>
         )}
       </For>
-    </div>
+    </MainLayout>
   )
 }
 
