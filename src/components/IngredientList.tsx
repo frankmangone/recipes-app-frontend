@@ -1,4 +1,5 @@
 import { createSignal, createEffect, For } from 'solid-js'
+import type { Component } from "solid-js"
 
 interface Ingredient {
   id: string
@@ -7,7 +8,7 @@ interface Ingredient {
   updated_at: string
 }
 
-const IngredientList = (props) => {
+const IngredientList: Component = () => {
   const [ingredients, setIngredients] = createSignal<Ingredient[]>([])
 
   createEffect(() => {
