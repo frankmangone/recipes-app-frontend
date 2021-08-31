@@ -8,7 +8,7 @@ interface Ingredient {
   updated_at: string
 }
 
-const IngredientList: Component = () => {
+const Ingredients: Component = () => {
   const [ingredients, setIngredients] = createSignal<Ingredient[]>([])
 
   createEffect(() => {
@@ -31,4 +31,4 @@ const IngredientList: Component = () => {
   )
 }
 
-export default IngredientList
+export default Ingredients
