@@ -1,4 +1,4 @@
-import Navbar from '../components/Navbar'
+import SideNavbar from '../components/SideNavbar'
 import type { Component } from "solid-js"
 
 interface MainLayoutProps {
@@ -7,9 +7,11 @@ interface MainLayoutProps {
 
 const MainLayout: Component = (props: MainLayoutProps) => {
   return (
-    <div>
-      <Navbar />
-      { props.children }
+    <div id='main-layout'>
+      <SideNavbar />
+      <div class='content'>
+        { props.children }
+      </div>
     </div>
   )
 }
