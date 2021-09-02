@@ -32,7 +32,7 @@ const NavbarWrapper = styled('nav')`
   left: 0;
   display: flex;
   flex-direction: column;
-  background-color: hsl(25, 100%, 75%);
+  background-color: hsl(25, 100%, 70%);
   padding: 5px;
   width: 200px;
 
@@ -44,7 +44,7 @@ const NavbarWrapper = styled('nav')`
     text-decoration: none;
 
     &:hover {
-      background-color: hsl(25, 100%, 70%);
+      background-color: hsl(25, 100%, 65%);
     }
 
     &.active {
