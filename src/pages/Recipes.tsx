@@ -1,4 +1,6 @@
 import { createSignal, createEffect, For } from 'solid-js'
+import { styled } from 'solid-styled-components'
+import RecipeCard from '../components/RecipeCard'
 import MainLayout from '../layouts/MainLayout'
 import type { Component } from "solid-js"
 
@@ -25,7 +27,6 @@ const Recipes: Component = () => {
     fetch('http://localhost:5000/recipes')
       .then((response) => response.json())
       .then((data: Recipe[]) => {
-        console.log(data)
         setRecipes(data)
       })
       .catch((error) => console.error(error))
@@ -33,15 +34,25 @@ const Recipes: Component = () => {
 
   return (
     <MainLayout>
-      <For each={recipes()} fallback={<div>Loading...</div>}>
-        { (recipe: Recipe) => (
-          <div>
-            {recipe.name}
-          </div>
-        )}
-      </For>
+      <RecipesWrapper>
+        <For each={recipes()} fallback={<div>Loading...</div>}>
+          { (recipe: Recipe) => (
+            <RecipeCard recipe={recipe} />
+          )}
+        </For>
+      </RecipesWrapper>
     </MainLayout>
   )
 }
 
 export default Recipes
+
+/**
+ * Styles
+ */
+
+const RecipesWrapper = styled('div')`
+  display: flex;
+  flex-wrap: wrap;
+  width: 100%;
+`

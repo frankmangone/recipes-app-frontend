@@ -24,10 +24,12 @@ export default MainLayout
  */
 
 const LayoutWrapper = styled('div')`
-  width: 100vw;
   height: 100vh;
+  width: 100vw;
 `
 
 const MainContent = styled('div')`
+  height: 100%;
   margin-left: 210px;
+  overflow-y: scroll;
 `
