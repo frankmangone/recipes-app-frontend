@@ -1,12 +1,25 @@
 import { createSignal } from 'solid-js'
+import api from '../lib/api'
 import type { Component } from "solid-js"
 
 const Login: Component = () => {
   const [email, setEmail] = createSignal<string>('')
   const [password, setPassword] = createSignal<string>('')
 
+  const handleLogin = (event: Event) => {
+    event.preventDefault()
+    api.post('/login', {
+      email: email(),
+      password: password(),
+    })
+      .then((response) => {
+        console.log(response)
+      })
+      .catch((error) => console.error(error))
+  }
+
   return (
-    <form autocomplete='off'>
+    <form autocomplete='current-password'>
       <input
         name='email'
         value={email()}
@@ -18,7 +31,7 @@ const Login: Component = () => {
         value={password()}
         oninput={(event: any) => setPassword(event.target.value) }
       />
-      <button>Login</button>
+      <button onClick={handleLogin}>Login</button>
     </form>
   )
 }

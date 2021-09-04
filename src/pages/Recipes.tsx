@@ -2,6 +2,7 @@ import { createSignal, createEffect, For } from 'solid-js'
 import { styled } from 'solid-styled-components'
 import RecipeCard from '../components/RecipeCard'
 import MainLayout from '../layouts/MainLayout'
+import api from '../lib/api'
 import type { Component } from "solid-js"
 
 interface Recipe {
@@ -24,10 +25,9 @@ const Recipes: Component = () => {
   const [recipes, setRecipes] = createSignal<Recipe[]>([])
 
   createEffect(() => {
-    fetch('http://localhost:5000/recipes')
-      .then((response) => response.json())
-      .then((data: Recipe[]) => {
-        setRecipes(data)
+    api.get('/recipes')
+      .then((response) => {
+        setRecipes(response.data as Recipe[])
       })
       .catch((error) => console.error(error))
   })
