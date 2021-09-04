@@ -1,39 +1,55 @@
 import { styled } from 'solid-styled-components'
 import { createSignal } from 'solid-js'
+import { useNavigate } from 'solid-app-router'
 import api from '../lib/api'
 import { colors } from '../lib/colors'
 import type { Component } from "solid-js"
 
 const Login: Component = () => {
+  const [logging, setLogging] = createSignal<boolean>(false)
+  const [error, setError] = createSignal<string | null>(null)
   const [email, setEmail] = createSignal<string>('')
   const [password, setPassword] = createSignal<string>('')
+  const navigate = useNavigate()
+
+  const handleSuccessfulLogin = () => {
+    navigate('/recipes', { replace: true })
+  }
 
   const handleLogin = (event: Event) => {
     event.preventDefault()
+    setLogging(true)
+
     api.post('/login', {
       email: email(),
       password: password(),
     })
       .then((response) => {
-        console.log(response)
+        if (response.status === 200) {
+          handleSuccessfulLogin()
+        }
       })
-      .catch((error) => console.error(error))
+      .catch((error) => {
+        console.error(error)
+        setLogging(false)
+      })
   }
 
   return (
     <SideForm autocomplete='current-password'>
-      <input
+      <p>Login</p>
+      <Input
         name='email'
         value={email()}
         oninput={(event: any) => setEmail(event.target.value) }
       />
-      <input
+      <Input
         name='password'
         type='password'
         value={password()}
         oninput={(event: any) => setPassword(event.target.value) }
       />
-      <button onClick={handleLogin}>Login</button>
+      <Button onClick={handleLogin}>Login</Button>
     </SideForm>
   )
 }
@@ -53,4 +69,34 @@ const SideForm = styled('form')`
   display: flex;
   flex-direction: column;
   background-color: ${colors.primary[70]};
+
+  width: 25rem;
+  max-width: calc(100vw - 2rem);
+  padding: 1rem;
 `
+
+const Input = styled('input')`
+  background-color: ${colors.white};
+  border: none;
+  border-radius: 0.2rem;
+  box-shadow: 0px 4px 12px -6px ${colors.primary[30]};
+  padding: 0.6rem;
+  margin: 0.4rem 0;
+  outline: none;
+`
+
+const Button = styled('button')`
+  background-color: ${colors.primary[60]};
+  border: 1px solid ${colors.primary[50]};
+  border-radius: 0.2rem;
+  box-shadow: 0px 4px 12px -6px ${colors.primary[30]};
+  color: ${colors.white};
+  cursor: pointer;
+  padding: 0.6rem;
+  margin: 0.3rem 0;
+
+  &:hover {
+    background-color: ${colors.primary[50]};
+  }
+`
+
