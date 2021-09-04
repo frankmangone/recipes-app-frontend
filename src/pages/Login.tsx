@@ -1,5 +1,7 @@
+import { styled } from 'solid-styled-components'
 import { createSignal } from 'solid-js'
 import api from '../lib/api'
+import { colors } from '../lib/colors'
 import type { Component } from "solid-js"
 
 const Login: Component = () => {
@@ -19,7 +21,7 @@ const Login: Component = () => {
   }
 
   return (
-    <form autocomplete='current-password'>
+    <SideForm autocomplete='current-password'>
       <input
         name='email'
         value={email()}
@@ -32,8 +34,23 @@ const Login: Component = () => {
         oninput={(event: any) => setPassword(event.target.value) }
       />
       <button onClick={handleLogin}>Login</button>
-    </form>
+    </SideForm>
   )
 }
 
 export default Login
+
+/**
+ * Styles
+ */
+
+const SideForm = styled('form')`
+  position: absolute;
+  top: 0;
+  left: 0;
+  bottom: 0;
+
+  display: flex;
+  flex-direction: column;
+  background-color: ${colors.primary[70]};
+`
