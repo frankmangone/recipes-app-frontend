@@ -23,10 +23,12 @@ interface RecipeIngredient {
 }
 
 const Recipes: Component = () => {
-  const { authHeaders } = useCurrentUser()
+  const { sessionStarted, authHeaders } = useCurrentUser()
   const [recipes, setRecipes] = createSignal<Recipe[]>([])
   
   createEffect(() => {
+    if (!sessionStarted()) return
+    
     api.get('/recipes', { headers: authHeaders() })
       .then((response) => {
         setRecipes(response.data as Recipe[])
