@@ -1,16 +1,36 @@
 import { styled } from 'solid-styled-components'
-import { createSignal } from 'solid-js'
+import { createEffect, createSignal, Show } from 'solid-js'
 import { useNavigate } from 'solid-app-router'
 import api from '../lib/api'
 import { colors } from '../lib/colors'
+import { status } from '../lib/http-status'
 import type { Component } from "solid-js"
 
 const Login: Component = () => {
+  // For initial token check on page load for auto-redirection
+  const [verifyingToken, setVerifyingToken] = createSignal<boolean>(true)
+  // To disable log in button while the request is being made
   const [logging, setLogging] = createSignal<boolean>(false)
+  // Log in errors returned by the server
   const [error, setError] = createSignal<string | null>(null)
+
+  // Signals for form fields
   const [email, setEmail] = createSignal<string>('')
   const [password, setPassword] = createSignal<string>('')
+
   const navigate = useNavigate()
+
+  createEffect(() => {
+    /**
+     * If there is a current user in store, then
+     * check if jwt is valid
+     */
+    api.post('/verify-authenticated')
+      .then((response) => {
+        if (response.status === 200) handleSuccessfulLogin()
+      })
+      .finally(() => setVerifyingToken(false))
+  })
 
   const handleSuccessfulLogin = () => {
     navigate('/recipes', { replace: true })
@@ -25,7 +45,7 @@ const Login: Component = () => {
       password: password(),
     })
       .then((response) => {
-        if (response.status === 200) {
+        if (response.status === status.OK) {
           handleSuccessfulLogin()
         }
       })
@@ -37,19 +57,26 @@ const Login: Component = () => {
 
   return (
     <SideForm autocomplete='current-password'>
-      <p>Login</p>
-      <Input
-        name='email'
-        value={email()}
-        oninput={(event: any) => setEmail(event.target.value) }
-      />
-      <Input
-        name='password'
-        type='password'
-        value={password()}
-        oninput={(event: any) => setPassword(event.target.value) }
-      />
-      <Button onClick={handleLogin}>Login</Button>
+      <Show when={!verifyingToken()} fallback={<p>Loading...</p>}>
+        <p>Login</p>
+        <Input
+          name='email'
+          value={email()}
+          oninput={(event: any) => setEmail(event.target.value) }
+        />
+        <Input
+          name='password'
+          type='password'
+          value={password()}
+          oninput={(event: any) => setPassword(event.target.value) }
+        />
+        <Button
+          onClick={handleLogin}
+          disabled={logging()}
+        >
+          Login
+        </Button>
+      </Show>
     </SideForm>
   )
 }
@@ -97,6 +124,10 @@ const Button = styled('button')`
 
   &:hover {
     background-color: ${colors.primary[50]};
+  }
+
+  &:disabled {
+    cursor: not-allowed;
   }
 `
 

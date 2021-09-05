@@ -18,7 +18,7 @@ const App: Component = () => {
       <Route path='/ingredients' element={<IngredientsPage />} />
       <Route path='/planning' element={<PlanningPage />} />
       <Route path='/recipes' element={<RecipesPage />} />
-      <Route path='/' element={<LoginPage />} />
+      <Route path='/login' element={<LoginPage />} />
     </Routes>
   )
 }
