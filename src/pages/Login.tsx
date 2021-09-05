@@ -4,6 +4,7 @@ import { useNavigate } from 'solid-app-router'
 import api from '../lib/api'
 import { colors } from '../lib/colors'
 import { status } from '../lib/http-status'
+import LoadingSpinner from '../components/LoadingSpinner'
 import type { Component } from "solid-js"
 
 const Login: Component = () => {
@@ -32,9 +33,7 @@ const Login: Component = () => {
       .finally(() => setVerifyingToken(false))
   })
 
-  const handleSuccessfulLogin = () => {
-    navigate('/recipes', { replace: true })
-  }
+  const handleSuccessfulLogin = () => navigate('/recipes', { replace: true })
 
   const handleLogin = (event: Event) => {
     event.preventDefault()
@@ -50,7 +49,6 @@ const Login: Component = () => {
         }
       })
       .catch((error) => {
-        console.error(error)
         setLogging(false)
       })
   }
@@ -74,7 +72,9 @@ const Login: Component = () => {
           onClick={handleLogin}
           disabled={logging()}
         >
-          Login
+          <Show when={!logging()} fallback={<LoadingSpinner />}>
+            <p>Login</p>
+          </Show>
         </Button>
       </Show>
     </SideForm>
@@ -109,6 +109,7 @@ const Input = styled('input')`
   box-shadow: 0px 4px 12px -6px ${colors.primary[30]};
   padding: 0.6rem;
   margin: 0.4rem 0;
+  line-height: 22px;
   outline: none;
 `
 
@@ -119,6 +120,8 @@ const Button = styled('button')`
   box-shadow: 0px 4px 12px -6px ${colors.primary[30]};
   color: ${colors.white};
   cursor: pointer;
+  display: flex;
+  justify-content: center;
   padding: 0.6rem;
   margin: 0.3rem 0;
 
@@ -128,6 +131,13 @@ const Button = styled('button')`
 
   &:disabled {
     cursor: not-allowed;
+    background-color: ${colors.primaryUnsaturated[40]};
+    border-color: ${colors.primaryUnsaturated[40]};
+  }
+
+  p {
+    line-height: 22px;
+    margin: 0;
   }
 `
 
