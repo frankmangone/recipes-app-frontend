@@ -41,7 +41,7 @@ export const CurrentUserProvider: Component = (props) => {
   const authHeaders = () => ({ Authorization: `Bearer ${currentUser()?.jwt}`})
 
   createEffect(() => {
-    api.post('/refresh_token')
+    api.post('/refresh-token')
       .then((response) => {
         if (response.status === status.OK) {
           setCurrentUser({
