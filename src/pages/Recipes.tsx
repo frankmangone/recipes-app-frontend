@@ -3,6 +3,7 @@ import { styled } from 'solid-styled-components'
 import RecipeCard from '@components/RecipeCard'
 import MainLayout from '@layouts/MainLayout'
 import api from '@lib/api'
+import { useCurrentUser } from '@context/CurrentUserContext'
 import type { Component } from "solid-js"
 
 interface Recipe {
@@ -22,10 +23,11 @@ interface RecipeIngredient {
 }
 
 const Recipes: Component = () => {
+  const { authHeaders } = useCurrentUser()
   const [recipes, setRecipes] = createSignal<Recipe[]>([])
-
+  
   createEffect(() => {
-    api.get('/recipes')
+    api.get('/recipes', { headers: authHeaders() })
       .then((response) => {
         setRecipes(response.data as Recipe[])
       })

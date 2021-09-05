@@ -5,11 +5,20 @@ import api from '@lib/api'
 import { colors } from '@lib/colors'
 import { status } from '@lib/http-status'
 import LoadingSpinner from '@components/LoadingSpinner'
+import { useCurrentUser } from '@context/CurrentUserContext'
 import type { Component } from "solid-js"
 
+interface LoginResponse {
+  jwt: string
+  name: string
+}
+
 const Login: Component = () => {
+  const { setCurrentUser } = useCurrentUser()
+  const navigate = useNavigate()
+
   // For initial token check on page load for auto-redirection
-  const [verifyingToken, setVerifyingToken] = createSignal<boolean>(true)
+  // const [verifyingToken, setVerifyingToken] = createSignal<boolean>(true)
   // To disable log in button while the request is being made
   const [logging, setLogging] = createSignal<boolean>(false)
   // Log in errors returned by the server
@@ -19,21 +28,23 @@ const Login: Component = () => {
   const [email, setEmail] = createSignal<string>('')
   const [password, setPassword] = createSignal<string>('')
 
-  const navigate = useNavigate()
 
-  createEffect(() => {
+  // createEffect(() => {
     /**
      * If there is a current user in store, then
      * check if jwt is valid
      */
-    api.post('/verify-authenticated')
-      .then((response) => {
-        if (response.status === 200) handleSuccessfulLogin()
-      })
-      .finally(() => setVerifyingToken(false))
-  })
+    // api.post('/verify-authenticated')
+    //   .then((response) => {
+    //     if (response.status === 200) handleSuccessfulLogin()
+    //   })
+    //   .finally(() => setVerifyingToken(false))
+  // })
 
-  const handleSuccessfulLogin = () => navigate('/recipes', { replace: true })
+  const handleSuccessfulLogin = (data: LoginResponse) => {
+    setCurrentUser(data)
+    navigate('/recipes', { replace: true })
+  }
 
   const handleLogin = (event: Event) => {
     event.preventDefault()
@@ -44,9 +55,7 @@ const Login: Component = () => {
       password: password(),
     })
       .then((response) => {
-        if (response.status === status.OK) {
-          handleSuccessfulLogin()
-        }
+        if (response.status === status.OK) handleSuccessfulLogin(response.data)
       })
       .catch((error) => {
         setLogging(false)
@@ -55,7 +64,7 @@ const Login: Component = () => {
 
   return (
     <SideForm autocomplete='current-password'>
-      <Show when={!verifyingToken()} fallback={<p>Loading...</p>}>
+      {/* <Show when={!verifyingToken()} fallback={<p>Loading...</p>}> */}
         <p>Login</p>
         <Input
           name='email'
@@ -76,7 +85,7 @@ const Login: Component = () => {
             <p>Login</p>
           </Show>
         </Button>
-      </Show>
+      {/* </Show> */}
     </SideForm>
   )
 }
