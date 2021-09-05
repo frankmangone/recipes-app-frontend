@@ -1,5 +1,5 @@
 import { styled } from 'solid-styled-components'
-import SideNavbar from '../components/SideNavbar'
+import SideNavbar from '@components/SideNavbar'
 import type { Component } from "solid-js"
 
 interface MainLayoutProps {

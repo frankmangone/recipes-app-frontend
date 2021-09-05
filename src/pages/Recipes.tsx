@@ -1,8 +1,8 @@
 import { createSignal, createEffect, For } from 'solid-js'
 import { styled } from 'solid-styled-components'
-import RecipeCard from '../components/RecipeCard'
-import MainLayout from '../layouts/MainLayout'
-import api from '../lib/api'
+import RecipeCard from '@components/RecipeCard'
+import MainLayout from '@layouts/MainLayout'
+import api from '@lib/api'
 import type { Component } from "solid-js"
 
 interface Recipe {

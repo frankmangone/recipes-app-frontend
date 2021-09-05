@@ -1,6 +1,6 @@
 import { styled } from 'solid-styled-components'
 import { Link, useLocation } from 'solid-app-router'
-import { colors } from '../lib/colors'
+import { colors } from '@lib/colors'
 import type { Component } from 'solid-js'
 
 const Navbar: Component = () => {

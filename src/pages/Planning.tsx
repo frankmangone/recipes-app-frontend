@@ -1,5 +1,5 @@
 import type { Component } from "solid-js"
-import MainLayout from '../layouts/MainLayout'
+import MainLayout from '@layouts/MainLayout'
 
 const Planning: Component = () => {
   return (

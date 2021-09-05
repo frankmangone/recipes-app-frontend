@@ -1,5 +1,5 @@
 import { styled } from 'solid-styled-components'
-import { colors } from '../lib/colors'
+import { colors } from '@lib/colors'
 import type { Component } from 'solid-js'
 
 const LoadingSpinner = styled('div')`

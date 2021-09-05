@@ -1,10 +1,10 @@
 import { styled } from 'solid-styled-components'
 import { createEffect, createSignal, Show } from 'solid-js'
 import { useNavigate } from 'solid-app-router'
-import api from '../lib/api'
-import { colors } from '../lib/colors'
-import { status } from '../lib/http-status'
-import LoadingSpinner from '../components/LoadingSpinner'
+import api from '@lib/api'
+import { colors } from '@lib/colors'
+import { status } from '@lib/http-status'
+import LoadingSpinner from '@components/LoadingSpinner'
 import type { Component } from "solid-js"
 
 const Login: Component = () => {
