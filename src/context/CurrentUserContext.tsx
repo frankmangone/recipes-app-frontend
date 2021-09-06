@@ -17,6 +17,8 @@ interface AuthHeader {
   Authorization: string
 }
 
+type Timeout = ReturnType<typeof setTimeout>
+
 interface DefaultValue {
   currentUser: () => CurrentUser
   setCurrentUser: (u: CurrentUser) => CurrentUser
@@ -38,9 +40,11 @@ export const useCurrentUser = () => useContext(CurrentUserContext)
 export const CurrentUserProvider: Component = (props) => {
   const [sessionStarted, setSessionStarted] = createSignal<boolean>(false)
   const [currentUser, setCurrentUser] = createSignal<CurrentUser | null>(null)
+  const [refreshTimeout, setRefreshTimeout] = createSignal<Timeout | null>(null)
+
   const authHeaders = () => ({ Authorization: `Bearer ${currentUser()?.jwt}`})
 
-  createEffect(() => {
+  const requestNewJWT = () => {
     api.post('/refresh-token')
       .then((response) => {
         if (response.status === status.OK) {
@@ -48,10 +52,21 @@ export const CurrentUserProvider: Component = (props) => {
             jwt: response.data.jwt,
             name: response.data.name,
           })
+          if (refreshTimeout()) clearTimeout(refreshTimeout())
+          setRefreshTimeout(() => {
+            return setTimeout(requestNewJWT, response.data.expiry - 2000)
+          })
         }
       })
       .catch((error) => console.error(error))
-      .finally(() => setSessionStarted(true))
+      .finally(() => { 
+        if(!sessionStarted()) setSessionStarted(true)
+      })
+  }
+
+  createEffect(() => {
+    if (sessionStarted()) return
+    requestNewJWT()
   })
 
   return (

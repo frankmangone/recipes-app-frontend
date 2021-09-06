@@ -14,7 +14,7 @@ interface LoginResponse {
 }
 
 const Login: Component = () => {
-  const { setCurrentUser } = useCurrentUser()
+  const { currentUser, setCurrentUser, sessionStarted } = useCurrentUser()
   const navigate = useNavigate()
 
   // For initial token check on page load for auto-redirection
@@ -29,17 +29,16 @@ const Login: Component = () => {
   const [password, setPassword] = createSignal<string>('')
 
 
-  // createEffect(() => {
+  createEffect(() => {
     /**
-     * If there is a current user in store, then
-     * check if jwt is valid
+     * If there is a current user in store (with jwt),
+     * redirect to /recipes
      */
-    // api.post('/verify-authenticated')
-    //   .then((response) => {
-    //     if (response.status === 200) handleSuccessfulLogin()
-    //   })
-    //   .finally(() => setVerifyingToken(false))
-  // })
+    if (!sessionStarted()) return
+    if (currentUser().jwt) {
+      navigate('/recipes', { replace: true })
+    }
+  })
 
   const handleSuccessfulLogin = (data: LoginResponse) => {
     setCurrentUser(data)
