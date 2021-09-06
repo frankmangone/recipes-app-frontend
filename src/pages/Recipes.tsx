@@ -3,6 +3,7 @@ import { styled } from 'solid-styled-components'
 import RecipeCard from '@components/RecipeCard'
 import MainLayout from '@layouts/MainLayout'
 import api from '@lib/api'
+import usePrivateRoute from '../hooks/usePrivateRoute'
 import { useCurrentUser } from '@context/CurrentUserContext'
 import type { Component } from "solid-js"
 
@@ -26,6 +27,8 @@ const Recipes: Component = () => {
   const { sessionStarted, authHeaders } = useCurrentUser()
   const [recipes, setRecipes] = createSignal<Recipe[]>([])
   
+  usePrivateRoute()
+
   createEffect(() => {
     if (!sessionStarted()) return
     
