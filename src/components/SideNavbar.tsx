@@ -3,7 +3,7 @@ import { Link, useLocation } from 'solid-app-router'
 import { colors } from '@lib/colors'
 import type { Component } from 'solid-js'
 
-const Navbar: Component = () => {
+const SideNavbar: Component = () => {
   const location = useLocation()
 
   const linkClasses = (pathname: string) => {
@@ -20,7 +20,7 @@ const Navbar: Component = () => {
   )
 }
 
-export default Navbar
+export default SideNavbar
 
 /**
  * Styles

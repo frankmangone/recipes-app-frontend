@@ -35,7 +35,7 @@ const Login: Component = () => {
      * redirect to /recipes
      */
     if (!sessionStarted()) return
-    if (currentUser().jwt) {
+    if (currentUser()?.jwt) {
       navigate('/recipes', { replace: true })
     }
   })
@@ -63,28 +63,26 @@ const Login: Component = () => {
 
   return (
     <SideForm autocomplete='current-password'>
-      {/* <Show when={!verifyingToken()} fallback={<p>Loading...</p>}> */}
-        <p>Login</p>
-        <Input
-          name='email'
-          value={email()}
-          oninput={(event: any) => setEmail(event.target.value) }
-        />
-        <Input
-          name='password'
-          type='password'
-          value={password()}
-          oninput={(event: any) => setPassword(event.target.value) }
-        />
-        <Button
-          onClick={handleLogin}
-          disabled={logging()}
-        >
-          <Show when={!logging()} fallback={<LoadingSpinner />}>
-            <p>Login</p>
-          </Show>
-        </Button>
-      {/* </Show> */}
+      <p>Login</p>
+      <Input
+        name='email'
+        value={email()}
+        oninput={(event: any) => setEmail(event.target.value) }
+      />
+      <Input
+        name='password'
+        type='password'
+        value={password()}
+        oninput={(event: any) => setPassword(event.target.value) }
+      />
+      <Button
+        onClick={handleLogin}
+        disabled={logging()}
+      >
+        <Show when={!logging()} fallback={<LoadingSpinner />}>
+          <p>Login</p>
+        </Show>
+      </Button>
     </SideForm>
   )
 }

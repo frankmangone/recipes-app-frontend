@@ -1,5 +1,6 @@
 import { styled } from 'solid-styled-components'
 import SideNavbar from '@components/SideNavbar'
+import TopNavbar from '@components/TopNavbar'
 import type { Component } from "solid-js"
 
 interface MainLayoutProps {
@@ -10,9 +11,12 @@ const MainLayout: Component = (props: MainLayoutProps) => {
   return (
     <LayoutWrapper>
       <SideNavbar />
-      <MainContent>
-        { props.children }
-      </MainContent>
+      <MainContentWrapper>
+        <TopNavbar />
+        <MainContent>
+          {props.children}
+        </MainContent>
+      </MainContentWrapper>
     </LayoutWrapper>
   )
 }
@@ -28,8 +32,15 @@ const LayoutWrapper = styled('div')`
   width: 100vw;
 `
 
-const MainContent = styled('div')`
+const MainContentWrapper = styled('div')`
   height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
   margin-left: 210px;
   overflow-y: scroll;
+`
+
+const MainContent = styled('div')`
+  padding: 1rem;
 `
