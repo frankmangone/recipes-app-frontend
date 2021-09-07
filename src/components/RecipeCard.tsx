@@ -1,9 +1,12 @@
 import { styled } from 'solid-styled-components'
 import { lazy } from "solid-js"
+import { useNavigate } from 'solid-app-router'
+import { colors } from '@lib/colors'
 import type { Component } from 'solid-js'
 
 interface RecipeCardProps {
   recipe: {
+    id: number
     name: string
     minutes: number
   }
@@ -11,10 +14,15 @@ interface RecipeCardProps {
 
 const RecipeCard: Component<RecipeCardProps> = (props) => {
   const AlarmIcon = lazy(() => import('../assets/alarm.svg'))
+  const navigate = useNavigate()
+
+  const navigateToRecipe = () => {
+    navigate(`/recipe/${props.recipe.id}`, { replace: true })
+  }
 
   return (
     <RecipeCardWrapper>
-      <RecipeCardInner>
+      <RecipeCardInner onClick={navigateToRecipe}>
         <RecipeTimeBadge>
           <AlarmIcon />
           <RecipeMinutes>
@@ -43,22 +51,27 @@ const RecipeCardWrapper = styled('div')`
 `
 
 const RecipeCardInner = styled('div')`
-  background-color: hsl(24, 19%, 95%);
+  background-color: ${colors.primaryUnsaturated[90]};
   border-radius: 10px;
   display: flex;
+  cursor: pointer;
   flex-direction: column;
   min-height: 180px;
   margin: 5px;
   overflow: hidden;
   position: relative;
+
+  &:hover {
+    background-color: ${colors.primaryUnsaturated[80]};
+  }
 `
 
 const RecipeTimeBadge = styled('div')`
   position: absolute;
   top: 10px;
   left: 10px;
-  background-color: hsl(25, 100%, 47%);
-  box-shadow: 0px 4px 10px -2px #4A1F00;
+  background-color: ${colors.primary[50]};
+  box-shadow: 0px 4px 10px -2px ${colors.primary[10]};
   color: white;
   display: flex;
   align-items: center;
@@ -86,7 +99,7 @@ const RecipePhoto = styled('div')<RecipePhotoProps>`
   height: 130px;
 `
 const RecipeDetails = styled('div')`
-  margin: 10px;
+  margin: 1rem 1.2rem;
   flex-grow: 1;
   display: flex;
   align-items: center;

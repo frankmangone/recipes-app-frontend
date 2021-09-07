@@ -1,16 +1,18 @@
 import { createSignal, createEffect, For } from 'solid-js'
+import { useParams } from 'solid-app-router'
 import { styled } from 'solid-styled-components'
-import RecipeCard from '@components/RecipeCard'
-import MainLayout from '@layouts/MainLayout'
+import RecipeLayout from '@layouts/RecipeLayout'
 import api from '@lib/api'
 import usePrivateRoute from '../hooks/usePrivateRoute'
 import { useCurrentUser } from '@context/CurrentUserContext'
 import type { Component } from "solid-js"
 
 interface Recipe {
-  id: number
+  id: string
   name: string
   minutes: number
+  steps: Step[]
+  recipe_ingredients:  RecipeIngredient[]
 }
 
 interface Step {
@@ -23,30 +25,30 @@ interface RecipeIngredient {
 
 const Recipes: Component = () => {
   const { sessionStarted, authHeaders } = useCurrentUser()
-  const [recipes, setRecipes] = createSignal<Recipe[]>([])
-  
+  const [recipe, setRecipe] = createSignal<Recipe | null>(null)
+  const params = useParams()
+
   usePrivateRoute()
 
   createEffect(() => {
     if (!sessionStarted()) return
     
-    api.get('/recipes', { headers: authHeaders() })
+    api.get(`/recipes/${params.id}`, { headers: authHeaders() })
       .then((response) => {
-        setRecipes(response.data as Recipe[])
+        console.log(response.data)
+        setRecipe(response.data as Recipe)
       })
       .catch((error) => console.error(error))
   })
 
   return (
-    <MainLayout>
-      <RecipesWrapper>
-        <For each={recipes()} fallback={<div>Loading...</div>}>
-          { (recipe: Recipe) => (
-            <RecipeCard recipe={recipe} />
-          )}
-        </For>
-      </RecipesWrapper>
-    </MainLayout>
+    <RecipeLayout>
+      <RecipeWrapper>
+        <Header>
+
+        </Header>
+      </RecipeWrapper>
+    </RecipeLayout>
   )
 }
 
@@ -56,8 +58,15 @@ export default Recipes
  * Styles
  */
 
-const RecipesWrapper = styled('div')`
+const RecipeWrapper = styled('div')`
   display: flex;
   flex-wrap: wrap;
   width: 100%;
+`
+
+const Header = styled('div')`
+  height: 300px;
+  width: 100%;
+  background-image: url(https://s01.sgp1.cdn.digitaloceanspaces.com/article/143395-pysnzzzleh-1593090551.jpg);
+  background-size: cover;
 `

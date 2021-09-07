@@ -11,6 +11,7 @@ const IngredientsPage = lazy(() => import('@pages/Ingredients'))
 const LoginPage = lazy(() => import('@pages/Login'))
 const PlanningPage = lazy(() => import('@pages/Planning'))
 const RecipesPage = lazy(() => import('@pages/Recipes'))
+const RecipePage = lazy(() => import('@pages/Recipe'))
 
 const App: Component = () => {
   return (
@@ -20,6 +21,7 @@ const App: Component = () => {
         <Route path='/ingredients' element={<IngredientsPage />} />
         <Route path='/planning' element={<PlanningPage />} />
         <Route path='/recipes' element={<RecipesPage />} />
+        <Route path='/recipe/:id' element={<RecipePage />} />
         <Route path='/login' element={<LoginPage />} />
       </Routes>
     </CurrentUserProvider>

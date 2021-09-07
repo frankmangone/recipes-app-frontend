@@ -6,7 +6,7 @@ import { status } from '@lib/http-status'
 import { colors } from '@lib/colors'
 import type { Component } from 'solid-js'
 
-const TopNavbar: Component = () => {
+const TransparentTopNavbar: Component = () => {
   const { authHeaders, currentUser, setCurrentUser } = useCurrentUser()
   const navigate = useNavigate()
 
@@ -28,7 +28,7 @@ const TopNavbar: Component = () => {
   )
 }
 
-export default TopNavbar
+export default TransparentTopNavbar
 
 /**
  * Styles
@@ -38,31 +38,35 @@ const NavbarWrapper = styled('nav')`
   display: flex;
   justify-content: flex-end;
   align-items: center;
-  background-color: ${colors.primaryUnsaturated[90]};
+  background-color: rgba(0, 0, 0, 0.2);
   padding: 0.6rem 1.2rem;
-  width: calc(100% - 2rem);
   height: 2.5rem;
+  width: calc(100% - 2rem);
+  margin-bottom: -3.7rem;
+  z-index: 10;
 `
 
 const Name = styled('p')`
-  border-right: 1px solid ${colors.primaryUnsaturated[60]};
-  color: ${colors.primaryUnsaturated[40]};
+  border-right: 1px solid ${colors.primaryUnsaturated[90]};
+  color: ${colors.primaryUnsaturated[90]};
+  text-shadow: 0 0 2px rgba(0, 0, 0, 0.6);
   font-size: 1rem;
+  font-weight: bold;
   margin: 0 1rem;
   padding: 0.8rem 1rem;
 `
 
 const LogoutButton = styled('button')`
-  background-color: ${colors.primaryUnsaturated[80]};
+  background-color: rgba(0, 0, 0, 0.3);
   border: none;
   border-radius: 5px;
-  color: ${colors.primaryUnsaturated[10]};
+  color: ${colors.white};
   cursor: pointer;
   font-size: 0.9rem;
   padding: 0.7rem;
   text-decoration: none;
 
   &:hover {
-    background-color: ${colors.primaryUnsaturated[70]};
+    background-color: rgba(0, 0, 0, 0.3);
   }
 `
