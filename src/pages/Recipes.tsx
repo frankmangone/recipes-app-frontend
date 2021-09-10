@@ -1,4 +1,4 @@
-import { createSignal, createEffect, For } from 'solid-js'
+import { createSignal, createResource, createEffect, For } from 'solid-js'
 import { styled } from 'solid-styled-components'
 import RecipeCard from '@components/RecipeCard'
 import MainLayout from '@layouts/MainLayout'
@@ -22,20 +22,16 @@ interface RecipeIngredient {
 }
 
 const Recipes: Component = () => {
-  const { sessionStarted, authHeaders } = useCurrentUser()
-  const [recipes, setRecipes] = createSignal<Recipe[]>([])
-  
-  usePrivateRoute()
-
-  createEffect(() => {
-    if (!sessionStarted()) return
-    
-    api.get('/recipes', { headers: authHeaders() })
+  const { authHeaders } = useCurrentUser()
+  const [recipes, { mutate, refetch }] = createResource<Recipe[]>(() => {
+    return api.get('/recipes', { headers: authHeaders() })
       .then((response) => {
-        setRecipes(response.data as Recipe[])
+        return response.data as Recipe[]
       })
       .catch((error) => console.error(error))
   })
+
+  usePrivateRoute()
 
   return (
     <MainLayout>

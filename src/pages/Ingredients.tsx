@@ -1,4 +1,4 @@
-import { createSignal, createEffect, For } from 'solid-js'
+import { createResource, createEffect, For } from 'solid-js'
 import MainLayout from '@layouts/MainLayout'
 import api from '@lib/api'
 import type { Component } from "solid-js"
@@ -11,12 +11,10 @@ interface Ingredient {
 }
 
 const Ingredients: Component = () => {
-  const [ingredients, setIngredients] = createSignal<Ingredient[]>([])
-
-  createEffect(() => {
-    api.get('/ingredients')
+  const [ingredients, { mutate, refetch }] = createResource<Ingredient[]>(() => {
+    return api.get('/ingredients')
       .then((response) => {
-        setIngredients(response.data as Ingredient[])
+        return response.data as Ingredient[]
       })
       .catch((error) => console.error(error))
   })

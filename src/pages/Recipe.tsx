@@ -1,4 +1,4 @@
-import { createSignal, createResource, createEffect, For } from 'solid-js'
+import {createResource, createEffect, For } from 'solid-js'
 import { useParams } from 'solid-app-router'
 import { styled } from 'solid-styled-components'
 import RecipeLayout from '@layouts/RecipeLayout'
@@ -29,23 +29,12 @@ const Recipes: Component = () => {
   const [recipe, { mutate, refetch }] = createResource<Recipe>(() => {
     return api.get(`/recipes/${params.id}`, { headers: authHeaders() })
       .then((response) => {
-        console.log(response.data)
         return response.data as Recipe
       })
       .catch((error) => console.error(error))
   })
-  // const [recipe, setRecipe] = createSignal<Recipe | null>(null)
 
   usePrivateRoute()
-
-  // createEffect(() => {    
-  //   api.get(`/recipes/${params.id}`, { headers: authHeaders() })
-  //     .then((response) => {
-  //       console.log(response.data)
-  //       setRecipe(response.data as Recipe)
-  //     })
-  //     .catch((error) => console.error(error))
-  // })
 
   return (
     <RecipeLayout>
