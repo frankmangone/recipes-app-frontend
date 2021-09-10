@@ -1,4 +1,4 @@
-import { createSignal, createEffect, For } from 'solid-js'
+import { createSignal, createResource, createEffect, For } from 'solid-js'
 import { useParams } from 'solid-app-router'
 import { styled } from 'solid-styled-components'
 import RecipeLayout from '@layouts/RecipeLayout'
@@ -24,29 +24,35 @@ interface RecipeIngredient {
 }
 
 const Recipes: Component = () => {
-  const { sessionStarted, authHeaders } = useCurrentUser()
-  const [recipe, setRecipe] = createSignal<Recipe | null>(null)
   const params = useParams()
-
-  usePrivateRoute()
-
-  createEffect(() => {
-    if (!sessionStarted()) return
-    
-    api.get(`/recipes/${params.id}`, { headers: authHeaders() })
+  const { authHeaders } = useCurrentUser()
+  const [recipe, { mutate, refetch }] = createResource<Recipe>(() => {
+    return api.get(`/recipes/${params.id}`, { headers: authHeaders() })
       .then((response) => {
         console.log(response.data)
-        setRecipe(response.data as Recipe)
+        return response.data as Recipe
       })
       .catch((error) => console.error(error))
   })
+  // const [recipe, setRecipe] = createSignal<Recipe | null>(null)
+
+  usePrivateRoute()
+
+  // createEffect(() => {    
+  //   api.get(`/recipes/${params.id}`, { headers: authHeaders() })
+  //     .then((response) => {
+  //       console.log(response.data)
+  //       setRecipe(response.data as Recipe)
+  //     })
+  //     .catch((error) => console.error(error))
+  // })
 
   return (
     <RecipeLayout>
       <RecipeWrapper>
         <Header>
-
         </Header>
+        <h3>{recipe()?.name}</h3>
       </RecipeWrapper>
     </RecipeLayout>
   )
