@@ -38,11 +38,12 @@ const NavbarWrapper = styled('nav')`
   display: flex;
   justify-content: flex-end;
   align-items: center;
-  background-color: rgba(0, 0, 0, 0.2);
+  background-color: rgba(255, 255, 255, 0.15);
   padding: 0.6rem 1.2rem;
   height: 2.5rem;
   width: calc(100% - 2rem);
   margin-bottom: -3.7rem;
+  backdrop-filter: blur(2px);
   z-index: 10;
 `
 
